@@ -195,10 +195,6 @@ st.markdown("---")
 
 
 
-
-
-
-
 # ---------------------- 1)Catalog Growth-Line Chart -------------------
 st.subheader("1.Catalog Growth-Line Chart")
 
@@ -227,6 +223,43 @@ else:
 
 st.markdown("---")
 #-------------------------------------------------------------------------
+
+
+
+
+
+# ------------- 2)Choropleth Map – Titles by Country --------------------
+
+st.subheader("2.Global Reach-Choropleth Map")
+
+choropleth_df = (
+    filtered["primary_country"]
+    .replace("", pd.NA)
+    .dropna()
+    .value_counts()
+    .reset_index()
+)
+choropleth_df.columns = ["country", "count"]
+
+if not choropleth_df.empty:
+    fig_choro = px.choropleth(
+        choropleth_df,
+        locations="country",
+        locationmode="country names",
+        color="count",
+        color_continuous_scale="Viridis",
+        title="Where does the content come from?",
+    )
+    fig_choro.update_layout(margin=dict(l=0, r=0, t=40, b=0))
+    st.plotly_chart(fig_choro, use_container_width=True)
+else:
+    st.info("No country data available for choropleth with current filters.")
+
+st.markdown("---")
+#------------------------------------------------------------------------------
+
+
+
 
 
 
