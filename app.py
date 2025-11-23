@@ -288,6 +288,16 @@ else:
 st.markdown("---")
 #---------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
 # ---------------- 4)Histogram – Duration Distribution --------------
 
 st.subheader("4.Movie Runtime-Histogram")
