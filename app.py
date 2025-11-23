@@ -264,6 +264,46 @@ st.markdown("---")
 
 
 
+# ---------------- 3)Treemap – Genre Breakdown ----------
+
+st.subheader("3.Genre Breakdown-Treemap")
+
+treemap_df = filtered.copy()
+treemap_df = treemap_df.replace({"main_genre": {"": "Unknown"}})
+
+treemap_df = treemap_df.groupby(["type", "main_genre"])["show_id"].count().reset_index()
+treemap_df.rename(columns={"show_id": "count"}, inplace=True)
+
+if not treemap_df.empty:
+    fig_tree = px.treemap(
+        treemap_df,
+        path=["type", "main_genre"],
+        values="count",
+        title="How is content split between Movies and TV?",
+    )
+    st.plotly_chart(fig_tree, use_container_width=True)
+else:
+    st.info("No data available for treemap with current filters.")
+
+st.markdown("---")
+#---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
