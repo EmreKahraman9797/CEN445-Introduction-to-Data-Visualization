@@ -407,7 +407,143 @@ else:
 
 
 
+# ---------------------- 7)Bar Chart – Top Genres -------------------
 
+st.subheader("7.Top Genres-Bar Chart")
+
+top_n = st.slider("Number of top genres to display", 5, 25, 10)
+
+genre_counts = (
+    filtered["main_genre"]
+    .replace("", pd.NA)
+    .dropna()
+    .value_counts()
+    .head(top_n)
+    .reset_index()
+)
+genre_counts.columns = ["main_genre", "count"]
+
+if not genre_counts.empty:
+    fig_genres = px.bar(
+        genre_counts,
+        x="main_genre",
+        y="count",
+        title=f"Top {top_n} main genres  \
+        <br>What are the most popular categories?",
+    )
+    fig_genres.update_layout(xaxis_title="Genre", yaxis_title="Number of titles")
+    st.plotly_chart(fig_genres, use_container_width=True)
+else:
+    st.info("No genre data available with current filters.")
+
+st.markdown("---")
+
+
+# ------------- 8)Sankey Diagram– Rating Flow --------------
+
+st.subheader("8.Rating Flow	Sankey Diagram")
+
+sankey_df = filtered.copy()
+sankey_df = sankey_df.replace({"main_genre": {"": "Unknown"}})
+
+#limitting to top ratings and top genres for readability
+top_ratings = sankey_df["rating"].value_counts().head(8).index.tolist()
+sankey_df = sankey_df[sankey_df["rating"].isin(top_ratings)]
+
+top_genres = sankey_df["main_genre"].value_counts().head(8).index.tolist()
+sankey_df = sankey_df[sankey_df["main_genre"].isin(top_genres)]
+
+if not sankey_df.empty:
+    #building nodes
+    types = sankey_df["type"].unique().tolist()
+    ratings = top_ratings
+    genres = top_genres
+
+    node_labels = types + ratings + genres
+
+    node_indices = {label: i for i, label in enumerate(node_labels)}
+
+    # type rating
+    tr = (
+        sankey_df.groupby(["type", "rating"])["show_id"]
+        .count()
+        .reset_index()
+    )
+    # rating - genre
+    rg = (
+        sankey_df.groupby(["rating", "main_genre"])["show_id"]
+        .count()
+        .reset_index()
+    )
+
+    sources = []
+    targets = []
+    values = []
+
+    #add edges type - rating
+    for _, row in tr.iterrows():
+        src = node_indices[row["type"]]
+        tgt = node_indices[row["rating"]]
+        sources.append(src)
+        targets.append(tgt)
+        values.append(row["show_id"])
+
+    #add edges rating - genre
+    for _, row in rg.iterrows():
+        src = node_indices[row["rating"]]
+        tgt = node_indices[row["main_genre"]]
+        sources.append(src)
+        targets.append(tgt)
+        values.append(row["show_id"])
+
+    fig_sankey = go.Figure(
+        data=[
+            go.Sankey(
+                node=dict(
+                    pad=15,
+                    thickness=15,
+                    line=dict(width=0.5),
+                    label=node_labels,
+                ),
+                link=dict(
+                    source=sources,
+                    target=targets,
+                    value=values,
+                ),
+            )
+        ]
+    )
+    fig_sankey.update_layout(title_text="How do Content Type, Rating, and Genre connect?", font_size=10)
+    st.plotly_chart(fig_sankey, use_container_width=True)
+else:
+    st.info("Not enough data to build a Sankey diagram with the current filters.")
+
+st.markdown("---")
+
+# ------------- 9) Heatmap – Rating vs Type --------------------------
+
+st.subheader("9.Rating Heatmap-Heatmap")
+
+heatmap_df = pd.crosstab(filtered["rating"], filtered["type"])
+
+if not heatmap_df.empty:
+    fig_heat = px.imshow(
+        heatmap_df,
+        labels=dict(x="Type", y="Rating", color="Count"),
+        title="Which ratings are most common for Movies vs. TV?",
+        aspect="auto",
+    )
+    st.plotly_chart(fig_heat, use_container_width=True)
+else:
+    st.info("No rating/type data available for heatmap with current filters.")
+
+st.markdown("---")
+
+st.caption(
+    "CEN445 – Introduction to Data Visualization | Netflix Dashboard"    )
+
+
+#test for alternative graphs(silmeyin)
 
 
 
