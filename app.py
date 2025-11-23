@@ -64,6 +64,17 @@ def load_data():
 
 df = load_data()
 
+
+
+
+
+
+
+
+
+
+
+
 st.title("Netflix Data Visualization Dashboard")
 
 if df is None:
@@ -175,6 +186,52 @@ with col_kpi4:
     st.metric("Countries Represented", int(unique_countries))
 
 st.markdown("---")
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ---------------------- 1)Catalog Growth-Line Chart -------------------
+st.subheader("1.Catalog Growth-Line Chart")
+
+if filtered["year_added"].notna().any():
+    growth = (
+        filtered.dropna(subset=["year_added"])
+        .groupby("year_added")["show_id"]
+        .count()
+        .reset_index()
+        .sort_values("year_added")
+    )
+    if not growth.empty:
+        fig_growth = px.line(
+            growth,
+            x="year_added",
+            y="show_id",
+            markers=True,
+            title="How fast is Netflix's library growing?",
+        )
+        fig_growth.update_layout(margin=dict(l=10, r=10, t=40, b=10))
+        st.plotly_chart(fig_growth, use_container_width=True)
+    else:
+        st.info("No data available for `year_added` with current filters.")
+else:
+    st.info("`date_added` information is missing for this dataset.")
+
+st.markdown("---")
+#-------------------------------------------------------------------------
+
+
+
+
+
 
 
 
