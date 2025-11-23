@@ -53,8 +53,8 @@ Visualizations:
 To run this dashboard locally, follow these steps:
 
 ### Clone the repository:
-- git clone -------
-- cd -------------
+- git clone https://github.com/EmreKahraman9797/CEN445-Introduction-to-Data-Visualization.git
+- cd CEN445-Introduction-to-Data-Visualization
 
 
 ### Install required libraries:
