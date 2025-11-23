@@ -343,8 +343,37 @@ st.markdown("---")
 
 
 
+# ------------- 6)Parallel Coordinates – Fixed Margins ------------------
 
+st.subheader("6.Length Trends-Parallel Coordinates")
 
+# 1. Filter: Movies only from 2010+
+pc_df = filtered[filtered['type'] == 'Movie'].copy()
+pc_df = pc_df[pc_df['release_year'] >= 2010] 
+pc_df = pc_df.dropna(subset=["release_year", "duration_int"])
+
+# 2. Sample to keep it clean
+if len(pc_df) > 300:
+    pc_df = pc_df.sample(n=300, random_state=42)
+
+if not pc_df.empty:
+    fig_pc = go.Figure(data=
+        go.Parcoords(
+            line = dict(color = pc_df['release_year'], 
+                       colorscale = 'Electric',
+                       showscale = True,
+                       colorbar = dict(title='Year')),
+            dimensions = list([
+                dict(range = [2010, 2021],
+                     label = 'Release Year', values = pc_df['release_year'],
+                     # setting ticks
+                     tickvals = [2010, 2012, 2014, 2016, 2018, 2020, 2021],
+                     ticktext = ['2010', '2012', '2014', '2016', '2018', '2020', '2021']),
+                dict(range = [0, 200],
+                     label = 'Duration (min)', values = pc_df['duration_int'])
+            ])
+        )
+    )
 
 
 
