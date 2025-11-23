@@ -288,7 +288,25 @@ else:
 st.markdown("---")
 #---------------------------------------------------------
 
+# ---------------- 4)Histogram – Duration Distribution --------------
 
+st.subheader("4.Movie Runtime-Histogram")
+
+movies_only = filtered[filtered["type"] == "Movie"].dropna(subset=["duration_int"])
+
+if not movies_only.empty:
+    fig_hist = px.histogram(
+        movies_only,
+        x="duration_int",
+        nbins=40,
+        title="How long is the average movie?",
+    )
+    fig_hist.update_layout(xaxis_title="Duration (minutes)", yaxis_title="Count")
+    st.plotly_chart(fig_hist, use_container_width=True)
+else:
+    st.info("No movie duration data available with current filters.")
+
+st.markdown("---")
 
 
 
