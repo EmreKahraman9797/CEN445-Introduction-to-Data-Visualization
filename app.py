@@ -375,6 +375,19 @@ if not pc_df.empty:
         )
     )
 
+    #margin fix for release years
+    fig_pc.update_layout(
+        title="Are movies getting longer or shorter?",
+        template="plotly_dark",
+        height=500,
+        margin=dict(l=80, r=50, t=80, b=40)  #pushing it right
+    )
+    
+    st.plotly_chart(fig_pc, use_container_width=True)
+else:
+    st.info("Not enough data for parallel coordinates.")
+
+
 
 
 
