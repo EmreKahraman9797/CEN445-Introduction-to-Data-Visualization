@@ -155,6 +155,26 @@ st.markdown(
 
 
 
+# ----------------------- KPI Cards ----------------------------------
+
+col_kpi1, col_kpi2, col_kpi3, col_kpi4 = st.columns(4)
+
+with col_kpi1:
+    st.metric("Total Titles", len(filtered))
+
+with col_kpi2:
+    movies_count = (filtered["type"] == "Movie").sum()
+    st.metric("Movies", int(movies_count))
+
+with col_kpi3:
+    shows_count = (filtered["type"] == "TV Show").sum()
+    st.metric("TV Shows", int(shows_count))
+
+with col_kpi4:
+    unique_countries = filtered["primary_country"].replace("", pd.NA).dropna().nunique()
+    st.metric("Countries Represented", int(unique_countries))
+
+st.markdown("---")
 
 
 
