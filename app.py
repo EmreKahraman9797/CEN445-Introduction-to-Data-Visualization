@@ -309,6 +309,34 @@ else:
 st.markdown("---")
 
 
+# ---------------- 5)Sunburst – Country → Genre → Type -------------
+
+st.subheader("5.Regional Tastes-Sunburst Chart")
+
+sunburst_df = filtered.copy()
+sunburst_df = sunburst_df.replace({"primary_country": {"": "Unknown"},
+                                   "main_genre": {"": "Unknown"}})
+
+sunburst_df = (
+    sunburst_df.groupby(["primary_country", "main_genre", "type"])["show_id"]
+    .count()
+    .reset_index()
+)
+sunburst_df.rename(columns={"show_id": "count"}, inplace=True)
+
+if not sunburst_df.empty:
+    fig_sun = px.sunburst(
+        sunburst_df,
+        path=["primary_country", "main_genre", "type"],
+        values="count",
+        title="Which countries produce which genres?",
+        maxdepth=3,
+    )
+    st.plotly_chart(fig_sun, use_container_width=True)
+else:
+    st.info("No data available for sunburst with current filters.")
+
+st.markdown("---")
 
 
 
