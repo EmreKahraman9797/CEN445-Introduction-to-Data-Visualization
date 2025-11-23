@@ -298,6 +298,10 @@ st.markdown("---")
 
 
 
+
+
+
+
 # ---------------- 4)Histogram – Duration Distribution --------------
 
 st.subheader("4.Movie Runtime-Histogram")
@@ -396,6 +400,17 @@ if not pc_df.empty:
     st.plotly_chart(fig_pc, use_container_width=True)
 else:
     st.info("Not enough data for parallel coordinates.")
+
+
+
+
+
+
+
+
+
+
+
 
 
 
