@@ -129,6 +129,30 @@ selected_genres = st.sidebar.multiselect(
 
 title_search = st.sidebar.text_input("Title contains (optional)", value="")
 
+# Apply filters
+mask = df["type"].isin(selected_types) & df["release_year"].between(
+    year_range[0], year_range[1]
+)
+
+if selected_countries:
+    mask &= df["primary_country"].isin(selected_countries)
+
+if selected_ratings:
+    mask &= df["rating"].isin(selected_ratings)
+
+if selected_genres:
+    mask &= df["main_genre"].isin(selected_genres)
+
+if title_search:
+    mask &= df["title"].str.contains(title_search, case=False, na=False)
+
+filtered = df[mask]
+
+st.markdown(
+    f"**Filtered titles:** {len(filtered)} "
+    f"(from total {len(df)} entries in the dataset)."
+)
+
 
 
 
