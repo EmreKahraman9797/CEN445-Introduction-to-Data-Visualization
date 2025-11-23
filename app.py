@@ -64,7 +64,20 @@ def load_data():
 
 df = load_data()
 
+st.title("Netflix Data Visualization Dashboard")
 
+if df is None:
+    st.error(
+        "Dataset not found. Please download `netflix_titles.csv` from Kaggle"
+    )
+    st.stop()
+
+st.markdown(
+    """
+This interactive dashboard explores the **Netflix Movies and TV Shows** dataset
+using multiple visualization techniques and interactive controls.
+"""
+)
 
 
 
