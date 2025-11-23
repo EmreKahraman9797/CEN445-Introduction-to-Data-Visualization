@@ -81,7 +81,53 @@ using multiple visualization techniques and interactive controls.
 
 
 
+# ----------------------- Sidebar Filters ----------------------------
 
+st.sidebar.header("Filters")
+
+type_options = sorted(df["type"].dropna().unique().tolist())
+selected_types = st.sidebar.multiselect(
+    "Content type",
+    options=type_options,
+    default=type_options,
+)
+
+min_year = int(df["release_year"].min())
+max_year = int(df["release_year"].max())
+year_range = st.sidebar.slider(
+    "Release year range",
+    min_value=min_year,
+    max_value=max_year,
+    value=(2000, max_year),
+    step=1,
+)
+
+country_options = sorted(
+    c for c in df["primary_country"].dropna().unique().tolist() if c
+)
+selected_countries = st.sidebar.multiselect(
+    "Primary country (optional)",
+    options=country_options,
+    default=[]
+)
+
+rating_options = sorted(df["rating"].dropna().unique().tolist())
+selected_ratings = st.sidebar.multiselect(
+    "Rating (optional)",
+    options=rating_options,
+    default=[]
+)
+
+genre_options = sorted(
+    g for g in df["main_genre"].dropna().unique().tolist() if g
+)
+selected_genres = st.sidebar.multiselect(
+    "Main genre (optional)",
+    options=genre_options,
+    default=[]
+)
+
+title_search = st.sidebar.text_input("Title contains (optional)", value="")
 
 
 
